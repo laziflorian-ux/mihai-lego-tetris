@@ -73,10 +73,42 @@
     }
 
     .hud {
+      position: relative;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      gap: 2px 12px;
+      grid-template-columns: minmax(76px, 1fr) auto minmax(76px, 1fr);
+      grid-template-rows: auto auto;
+      align-items: start;
+      gap: 7px 10px;
+      min-height: 150px;
+      padding: 8px 10px 10px;
+      border: 2px solid rgba(113, 189, 240, 0.35);
+      border-radius: 12px;
+      background:
+        linear-gradient(180deg, rgba(4, 10, 18, 0.78), rgba(8, 17, 27, 0.44)),
+        radial-gradient(circle at 50% 0%, rgba(255, 217, 48, 0.18), transparent 44%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 -10px 18px rgba(0, 0, 0, 0.18),
+        0 12px 28px rgba(0, 0, 0, 0.22);
+      overflow: hidden;
+    }
+
+    .hud::before {
+      content: "";
+      position: absolute;
+      inset: 8px 12px auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(159, 214, 239, 0.45), transparent);
+    }
+
+    .score-panel {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: start;
+      align-self: start;
+      padding-top: 0;
+      position: relative;
+      z-index: 1;
     }
 
     .score {
@@ -90,24 +122,30 @@
     }
 
     .game-title {
-      grid-column: 1 / -1;
-      margin-bottom: -6px;
+      grid-column: 2;
+      grid-row: 1;
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 9px;
       color: var(--gold);
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 900;
       line-height: 1;
       text-align: center;
       text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
     }
 
+    .game-title span {
+      white-space: nowrap;
+    }
+
     .player-photo {
-      width: 65px;
-      height: 65px;
-      flex: 0 0 65px;
+      width: 58px;
+      height: 58px;
+      flex: 0 0 58px;
       border: 3px solid var(--gold);
       border-radius: 50%;
       object-fit: cover;
@@ -124,18 +162,54 @@
       line-height: 1.25;
     }
 
-    .stat.right {
-      text-align: right;
+    .level-panel {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      justify-self: center;
+      position: relative;
+      z-index: 1;
+      min-width: min(276px, calc(100vw - 86px));
+      padding: 7px 14px 8px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 17px;
+      font-weight: 900;
+      line-height: 1.25;
+      text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      border: 1px solid rgba(159, 214, 239, 0.22);
+      background:
+        linear-gradient(180deg, rgba(10, 24, 37, 0.72), rgba(4, 12, 20, 0.52));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 8px 18px rgba(0, 0, 0, 0.18);
     }
 
-    .hud-actions {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 8px;
+    .level-label,
+    .best-label {
+      display: block;
+      color: #dff5ff;
+      font-size: 13px;
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .level-value,
+    .best-value {
+      color: var(--gold);
+      font-size: 18px;
+    }
+
+    .best-line {
+      display: block;
+      margin-top: 5px;
     }
 
     .mute-button {
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+      align-self: start;
       position: relative;
       z-index: 25;
       width: 44px;
@@ -166,11 +240,11 @@
 
     .board {
       width: var(--board-width);
-      aspect-ratio: 10 / 20;
+      aspect-ratio: 12 / 24;
       padding: 8px;
       display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      grid-template-rows: repeat(20, 1fr);
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(24, 1fr);
       gap: 3px;
       border: 7px solid var(--rim);
       border-radius: 10px;
@@ -179,9 +253,11 @@
         linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.14)),
         var(--baseplate);
       box-shadow:
+        0 0 0 2px rgba(111, 198, 255, 0.26),
+        0 0 24px rgba(41, 165, 255, 0.34),
         inset 0 0 0 3px rgba(255, 255, 255, 0.08),
         inset 0 -10px 0 rgba(0, 0, 0, 0.16),
-        0 18px 38px rgba(0, 0, 0, 0.42);
+        0 18px 38px rgba(0, 0, 0, 0.48);
       touch-action: none;
     }
 
@@ -432,7 +508,8 @@
       }
 
       .game-title {
-        font-size: 16px;
+        gap: 7px;
+        font-size: 15px;
       }
 
       .player-photo {
@@ -449,9 +526,58 @@
         font-size: 13px;
       }
 
+      .hud {
+        grid-template-columns: minmax(62px, 1fr) auto minmax(62px, 1fr);
+        min-height: 126px;
+        gap: 6px 8px;
+        padding: 6px 8px 8px;
+      }
+
+      .level-panel {
+        min-width: min(238px, calc(100vw - 86px));
+        padding: 4px 10px 6px;
+        font-size: 14px;
+      }
+
+      .level-label,
+      .best-label {
+        font-size: 11px;
+      }
+
+      .level-value,
+      .best-value {
+        font-size: 15px;
+      }
+
       button {
         font-size: 20px;
         min-height: 48px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .hud {
+        grid-template-columns: minmax(58px, 1fr) auto minmax(58px, 1fr);
+      }
+
+      .game-title {
+        gap: 7px;
+        font-size: 15px;
+      }
+
+      .player-photo {
+        width: 52px;
+        height: 52px;
+        flex-basis: 52px;
+      }
+
+      .score {
+        font-size: 34px;
+      }
+
+      .mute-button {
+        width: 42px;
+        min-height: 38px;
       }
     }
   </style>
@@ -459,18 +585,16 @@
 <body>
   <main class="app">
     <header class="hud">
+      <div class="score-panel">
+        <div class="score" id="score">0</div>
+        <div class="stat" id="lines">0 lines</div>
+      </div>
       <div class="game-title">
         <img class="player-photo" src="assets/mihai-player.jpg" alt="Mihai">
         <span>Mihai's Lego Tetris</span>
       </div>
-      <div>
-        <div class="score" id="score">0</div>
-        <div class="stat" id="lines">0 lines</div>
-      </div>
-      <div class="hud-actions">
-        <div class="stat right" id="level">Level 1<br>Best 0</div>
-        <button id="muteButton" class="mute-button" type="button" aria-label="Mute sound" aria-pressed="false">🔊</button>
-      </div>
+      <button id="muteButton" class="mute-button" type="button" aria-label="Mute sound" aria-pressed="false">🔊</button>
+      <div class="level-panel" id="level">Level 1<br>Best 0 - No score</div>
     </header>
 
     <section class="board-wrap">
@@ -508,8 +632,8 @@
   </main>
 
   <script>
-    const columns = 10;
-    const rows = 20;
+    const columns = 12;
+    const rows = 24;
     const empty = null;
     const board = document.getElementById('board');
     const scoreEl = document.getElementById('score');
@@ -560,9 +684,10 @@
       const verticalPadding = parseFloat(appStyle.paddingTop) + parseFloat(appStyle.paddingBottom);
       const rowGap = parseFloat(appStyle.rowGap || appStyle.gap || 0);
       const availableBoardHeight = viewportHeight - hud.offsetHeight - controls.offsetHeight - verticalPadding - (rowGap * 2) - 10;
-      const maxWidthByHeight = Math.max(170, Math.floor(availableBoardHeight / 2));
+      const boardRatio = columns / rows;
+      const maxWidthByHeight = Math.max(170, Math.floor(availableBoardHeight * boardRatio));
       const maxWidthByViewport = Math.max(220, window.innerWidth - 28);
-      const boardWidth = Math.min(330, maxWidthByViewport, maxWidthByHeight);
+      const boardWidth = Math.min(430, maxWidthByViewport, maxWidthByHeight);
 
       document.documentElement.style.setProperty('--board-width', `${boardWidth}px`);
     }
@@ -792,9 +917,12 @@
     }
 
     function updateHud() {
+      const best = getScores()[0];
       scoreEl.textContent = String(score);
       linesEl.textContent = `${clearedLines} lines`;
-      levelEl.innerHTML = `Level ${level}<br>Best ${getScores()[0]?.score || 0}`;
+      levelEl.innerHTML = best
+        ? `<span class="level-label">LEVEL <span class="level-value">${level}</span></span><span class="best-line"><span class="best-label">BEST <span class="best-value">${best.score}</span> - ${escapeHtml(best.name)}</span></span>`
+        : `<span class="level-label">LEVEL <span class="level-value">${level}</span></span><span class="best-line"><span class="best-label">BEST <span class="best-value">0</span> - No score</span></span>`;
     }
 
     function clonePiece(piece) {
