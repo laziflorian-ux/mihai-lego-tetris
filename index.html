@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ro">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Brick Tetris Demo</title>
+  <title>Mihai's Lego Tetris</title>
   <style>
     :root {
       color-scheme: dark;
@@ -486,7 +486,7 @@
 
     <section class="overlay" id="startOverlay">
       <div class="modal">
-        <h1>BRICK TETRIS</h1>
+        <h1>Mihai's Lego Tetris</h1>
         <p>Build lines. Clear rows. Beat the best score.</p>
         <button id="playButton">PLAY</button>
       </div>
@@ -738,7 +738,7 @@
       saveControls.classList.remove('hidden');
       saveButton.disabled = false;
       gameOverOverlay.classList.remove('hidden');
-      playerName.value = localStorage.getItem('wood_tetris_name') || '';
+      playerName.value = localStorage.getItem('mihai_tetris_name') || localStorage.getItem('wood_tetris_name') || '';
       playerName.focus();
       renderScores();
       playGameOverSound();
@@ -809,7 +809,7 @@
 
     function getScores() {
       try {
-        return JSON.parse(localStorage.getItem('wood_tetris_scores') || '[]');
+        return JSON.parse(localStorage.getItem('mihai_tetris_scores') || localStorage.getItem('wood_tetris_scores') || '[]');
       } catch {
         return [];
       }
@@ -823,11 +823,11 @@
       saveControls.classList.add('hidden');
 
       const safeName = name.trim() || 'Anonymous';
-      localStorage.setItem('wood_tetris_name', safeName);
+      localStorage.setItem('mihai_tetris_name', safeName);
       const scores = getScores();
       scores.push({ name: safeName, score, lines: clearedLines, date: new Date().toISOString() });
       scores.sort((a, b) => b.score - a.score);
-      localStorage.setItem('wood_tetris_scores', JSON.stringify(scores.slice(0, 10)));
+      localStorage.setItem('mihai_tetris_scores', JSON.stringify(scores.slice(0, 10)));
       saveHint.textContent = 'Score saved';
       renderScores();
       updateHud();
