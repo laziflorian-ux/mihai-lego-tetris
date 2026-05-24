@@ -13,9 +13,9 @@
       --panel: #f6c737;
       --panel-dark: #8f5b00;
       --rim: #17202a;
-      --baseplate: #176b42;
-      --baseplate-dark: #0d4028;
-      --cell: #134f35;
+      --baseplate: #0f5b38;
+      --baseplate-dark: #082f20;
+      --cell: #082e22;
       --text: #fff4c7;
       --ink: #17202a;
       --muted: #9fd6ef;
@@ -162,14 +162,23 @@
       line-height: 1.25;
     }
 
+    #lines {
+      font-size: 11px;
+      opacity: 0.94;
+    }
+
     .level-panel {
       grid-column: 1 / -1;
       grid-row: 2;
       justify-self: center;
       position: relative;
       z-index: 1;
-      min-width: min(276px, calc(100vw - 86px));
-      padding: 7px 14px 8px;
+      min-width: min(306px, calc(100vw - 54px));
+      padding: 6px 8px 7px 14px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
       text-align: center;
       color: var(--muted);
       font-size: 17px;
@@ -205,13 +214,69 @@
       margin-top: 5px;
     }
 
-    .mute-button {
+    .next-panel {
+      width: 76px;
+      min-height: 60px;
+      padding: 4px 5px 5px;
+      border: 1px solid rgba(255, 217, 48, 0.34);
+      border-radius: 7px;
+      background:
+        radial-gradient(circle at 50% 16%, rgba(255, 217, 48, 0.2), transparent 42%),
+        rgba(2, 9, 15, 0.62);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 5px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    .next-label {
+      display: block;
+      margin-bottom: 3px;
+      color: #dff5ff;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .next-grid {
+      width: 52px;
+      height: 36px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 2px;
+    }
+
+    .next-cell {
+      border: 1px solid rgba(84, 153, 196, 0.12);
+      border-radius: 2px;
+      background: rgba(3, 17, 26, 0.44);
+    }
+
+    .next-cell.filled {
+      border-color: color-mix(in srgb, var(--piece-color) 72%, #fff);
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.3) 0 24%, transparent 26%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.22)),
+        var(--piece-color);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.34),
+        0 1px 2px rgba(0, 0, 0, 0.34);
+    }
+
+    .hud-buttons {
       grid-column: 3;
       grid-row: 1;
       justify-self: end;
       align-self: start;
       position: relative;
       z-index: 25;
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+    }
+
+    .hud-icon-button {
       width: 44px;
       min-height: 38px;
       padding: 0;
@@ -224,11 +289,23 @@
         0 8px 14px rgba(0, 0, 0, 0.2);
     }
 
+    .hud-icon-button:disabled {
+      opacity: 0.45;
+      filter: grayscale(0.45);
+    }
+
     .mute-button.is-muted {
       background:
         radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.22) 0 8px, transparent 9px),
         linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.2)),
         #576273;
+    }
+
+    .pause-button.is-paused {
+      background:
+        radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.25) 0 8px, transparent 9px),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.18)),
+        #2fb365;
     }
 
     .board-wrap {
@@ -239,18 +316,20 @@
     }
 
     .board {
+      position: relative;
+      isolation: isolate;
       width: var(--board-width);
-      aspect-ratio: 12 / 24;
+      aspect-ratio: 13 / 18;
       padding: 8px;
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-template-rows: repeat(24, 1fr);
+      grid-template-columns: repeat(13, 1fr);
+      grid-template-rows: repeat(18, 1fr);
       gap: 3px;
       border: 7px solid var(--rim);
       border-radius: 10px;
       background:
-        radial-gradient(circle, rgba(255, 255, 255, 0.13) 0 18%, transparent 20%) 0 0 / 28px 28px,
-        linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.14)),
+        radial-gradient(circle, rgba(255, 255, 255, 0.12) 0 18%, transparent 20%) 0 0 / 28px 28px,
+        linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.26)),
         var(--baseplate);
       box-shadow:
         0 0 0 2px rgba(111, 198, 255, 0.26),
@@ -264,24 +343,25 @@
     .cell {
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(7, 33, 21, 0.86);
+      border: 1px solid rgba(2, 20, 16, 0.98);
       border-radius: 4px;
       background:
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0 18%, transparent 20%),
-        linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.18)),
+        radial-gradient(circle at 50% 50%, rgba(123, 208, 166, 0.16) 0 18%, transparent 20%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.035), rgba(0, 0, 0, 0.3)),
         var(--cell);
     }
 
     .cell.filled {
-      border: 1px solid color-mix(in srgb, var(--piece-color, #e53935) 55%, #111);
+      border: 1px solid color-mix(in srgb, var(--piece-color, #e53935) 68%, #fff);
       border-radius: 5px;
       background:
         linear-gradient(145deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.06) 34%, rgba(0, 0, 0, 0.24)),
         var(--piece-color, #c97932);
       box-shadow:
-        inset 0 3px 0 rgba(255, 255, 255, 0.28),
+        inset 0 3px 0 rgba(255, 255, 255, 0.4),
         inset 0 -4px 0 rgba(0, 0, 0, 0.23),
-        0 2px 0 rgba(0, 0, 0, 0.34);
+        0 0 0 1px rgba(0, 0, 0, 0.22),
+        0 2px 0 rgba(0, 0, 0, 0.38);
     }
 
     .cell.filled::before {
@@ -312,18 +392,149 @@
     }
 
     .cell.ghost {
-      opacity: 0.5;
-      outline: 2px dashed rgba(255, 217, 48, 0.72);
+      z-index: 1;
+      opacity: 0.82;
+      outline: 2px dashed rgba(255, 228, 72, 0.88);
       outline-offset: -2px;
+      background:
+        radial-gradient(circle at 50% 44%, rgba(255, 245, 148, 0.24) 0 22%, transparent 24%),
+        linear-gradient(145deg, rgba(255, 231, 77, 0.13), rgba(32, 181, 255, 0.1)),
+        color-mix(in srgb, var(--piece-color, #ffd930) 22%, var(--cell));
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 214, 0.34),
+        0 0 5px rgba(255, 217, 48, 0.42),
+        0 0 10px rgba(49, 185, 255, 0.22);
+      animation: ghost-pulse 920ms ease-in-out infinite;
+    }
+
+    .cell.ghost::before {
+      content: "";
+      position: absolute;
+      inset: 28%;
+      border: 1px solid rgba(255, 250, 191, 0.54);
+      border-radius: 50%;
+      background: rgba(255, 231, 77, 0.1);
+      box-shadow: 0 0 4px rgba(255, 217, 48, 0.38);
+    }
+
+    .cell.ghost::after {
+      content: "";
+      position: absolute;
+      inset: 13%;
+      border-radius: 3px;
+      border: 1px solid rgba(102, 213, 255, 0.32);
+      background: transparent;
+    }
+
+    @keyframes ghost-pulse {
+      0%, 100% { filter: brightness(1); transform: scale(1); }
+      50% { filter: brightness(1.14); transform: scale(1.018); }
     }
 
     .cell.clear {
-      animation: clear-line 160ms ease-in forwards;
+      z-index: 2;
+      animation: clear-line 280ms ease-out forwards;
     }
 
     @keyframes clear-line {
-      0% { transform: scale(1); filter: brightness(1.6); }
-      100% { transform: scale(0.12); opacity: 0; }
+      0% { transform: scale(1); filter: brightness(1.2) saturate(1.1); }
+      34% { transform: scale(1.08); filter: brightness(2.7) saturate(1.8); }
+      100% { transform: scale(0.08, 0.34); filter: brightness(3); opacity: 0; }
+    }
+
+    .board.line-clear-kick {
+      animation: board-clear-kick 360ms ease-out;
+    }
+
+    .line-burst {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      z-index: 4;
+      border: 1px solid rgba(255, 247, 163, 0.85);
+      border-radius: 999px;
+      pointer-events: none;
+      overflow: hidden;
+      mix-blend-mode: screen;
+      background:
+        linear-gradient(90deg, transparent, rgba(94, 223, 255, 0.88), rgba(255, 243, 138, 1), rgba(94, 223, 255, 0.88), transparent);
+      box-shadow:
+        0 0 11px rgba(255, 232, 86, 0.8),
+        0 0 28px rgba(49, 185, 255, 0.78);
+      animation: line-burst 520ms ease-out forwards;
+    }
+
+    .line-burst::before {
+      content: "";
+      position: absolute;
+      inset: -120% -30%;
+      background:
+        repeating-linear-gradient(115deg, transparent 0 10%, rgba(255, 255, 255, 0.95) 11% 14%, transparent 15% 24%);
+      transform: translateX(-70%);
+      animation: line-sweep 470ms ease-out forwards;
+    }
+
+    .clear-reward {
+      position: absolute;
+      left: 50%;
+      top: 44%;
+      z-index: 6;
+      width: min(92%, 300px);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #fffad3;
+      font-size: clamp(18px, 5vw, 30px);
+      font-weight: 900;
+      line-height: 1.04;
+      text-shadow:
+        0 3px 0 rgba(0, 0, 0, 0.55),
+        0 0 12px rgba(255, 217, 48, 0.8),
+        0 0 28px rgba(55, 191, 255, 0.7);
+      animation: clear-reward 820ms ease-out forwards;
+    }
+
+    .clear-reward span {
+      display: block;
+      margin-top: 3px;
+      color: var(--gold);
+      font-size: 0.72em;
+    }
+
+    .score.score-pop {
+      animation: score-pop 560ms ease-out;
+    }
+
+    @keyframes board-clear-kick {
+      0%, 100% { transform: translateX(0) scale(1); }
+      25% { transform: translateX(-3px) scale(1.006); }
+      52% { transform: translateX(3px) scale(1.01); }
+      76% { transform: translateX(-1px) scale(1.004); }
+    }
+
+    @keyframes line-burst {
+      0% { transform: scaleX(0.12); opacity: 0; }
+      18% { transform: scaleX(1); opacity: 1; }
+      100% { transform: scaleX(1.04); opacity: 0; }
+    }
+
+    @keyframes line-sweep {
+      0% { transform: translateX(-72%); opacity: 0; }
+      28% { opacity: 1; }
+      100% { transform: translateX(72%); opacity: 0; }
+    }
+
+    @keyframes clear-reward {
+      0% { transform: translate(-50%, -35%) scale(0.62); opacity: 0; }
+      18% { transform: translate(-50%, -50%) scale(1.12); opacity: 1; }
+      55% { transform: translate(-50%, -58%) scale(1); opacity: 1; }
+      100% { transform: translate(-50%, -92%) scale(0.94); opacity: 0; }
+    }
+
+    @keyframes score-pop {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.24); filter: brightness(1.35); }
+      100% { transform: scale(1); }
     }
 
     .controls {
@@ -526,6 +737,10 @@
         font-size: 13px;
       }
 
+      #lines {
+        font-size: 10px;
+      }
+
       .hud {
         grid-template-columns: minmax(62px, 1fr) auto minmax(62px, 1fr);
         min-height: 126px;
@@ -557,27 +772,32 @@
 
     @media (max-width: 430px) {
       .hud {
-        grid-template-columns: minmax(58px, 1fr) auto minmax(58px, 1fr);
+        grid-template-columns: minmax(56px, 1fr) auto minmax(74px, 1fr);
       }
 
       .game-title {
-        gap: 7px;
-        font-size: 15px;
+        gap: 6px;
+        font-size: 13px;
       }
 
       .player-photo {
-        width: 52px;
-        height: 52px;
-        flex-basis: 52px;
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
       }
 
       .score {
         font-size: 34px;
       }
 
-      .mute-button {
-        width: 42px;
-        min-height: 38px;
+      .hud-icon-button {
+        width: 36px;
+        min-height: 34px;
+        font-size: 15px;
+      }
+
+      .hud-buttons {
+        gap: 5px;
       }
     }
   </style>
@@ -593,8 +813,17 @@
         <img class="player-photo" src="assets/mihai-player.jpg" alt="Mihai">
         <span>Mihai's Lego Tetris</span>
       </div>
-      <button id="muteButton" class="mute-button" type="button" aria-label="Mute sound" aria-pressed="false">🔊</button>
-      <div class="level-panel" id="level">Level 1<br>Best 0 - No score</div>
+      <div class="hud-buttons">
+        <button id="pauseButton" class="hud-icon-button pause-button" type="button" aria-label="Pause game" aria-pressed="false" disabled>Ⅱ</button>
+        <button id="muteButton" class="hud-icon-button mute-button" type="button" aria-label="Mute sound" aria-pressed="false">🔊</button>
+      </div>
+      <div class="level-panel">
+        <div id="level">Level 1<br>Best 0 - No score</div>
+        <div class="next-panel" aria-label="Next piece">
+          <span class="next-label">NEXT</span>
+          <div class="next-grid" id="nextGrid"></div>
+        </div>
+      </div>
     </header>
 
     <section class="board-wrap">
@@ -629,20 +858,31 @@
         <button type="button" id="restartButton">RESTART</button>
       </form>
     </section>
+
+    <section class="overlay hidden" id="pauseOverlay">
+      <div class="modal">
+        <h2>PAUSED</h2>
+        <p>Take a breath. The next drop waits.</p>
+        <button type="button" id="resumeButton">RESUME</button>
+      </div>
+    </section>
   </main>
 
   <script>
-    const columns = 12;
-    const rows = 24;
+    const columns = 13;
+    const rows = 18;
     const empty = null;
     const board = document.getElementById('board');
     const scoreEl = document.getElementById('score');
     const linesEl = document.getElementById('lines');
     const levelEl = document.getElementById('level');
+    const nextGrid = document.getElementById('nextGrid');
     const startOverlay = document.getElementById('startOverlay');
     const gameOverOverlay = document.getElementById('gameOverOverlay');
+    const pauseOverlay = document.getElementById('pauseOverlay');
     const finalScoreEl = document.getElementById('finalScore');
     const playerName = document.getElementById('playerName');
+    const pauseButton = document.getElementById('pauseButton');
     const muteButton = document.getElementById('muteButton');
     const saveControls = document.getElementById('saveControls');
     const saveButton = document.getElementById('saveButton');
@@ -657,7 +897,7 @@
       J: { color: '#0055bf', cells: [[0, 0], [0, 1], [1, 1], [2, 1]] },
       L: { color: '#ff8200', cells: [[2, 0], [0, 1], [1, 1], [2, 1]] },
       O: { color: '#ffd500', cells: [[1, 0], [2, 0], [1, 1], [2, 1]] },
-      S: { color: '#237841', cells: [[1, 0], [2, 0], [0, 1], [1, 1]] },
+      S: { color: '#47c83e', cells: [[1, 0], [2, 0], [0, 1], [1, 1]] },
       T: { color: '#6b327b', cells: [[1, 0], [0, 1], [1, 1], [2, 1]] },
       Z: { color: '#c91a09', cells: [[0, 0], [1, 0], [1, 1], [2, 1]] }
     };
@@ -671,9 +911,15 @@
     let level = 1;
     let dropTimer;
     let running = false;
+    let paused = false;
     let scoreSaved = false;
+    let clearingLines = false;
     let audioContext;
     let muted = localStorage.getItem('mihai_tetris_muted') === 'true';
+    let backgroundMusicEnabled = false;
+    let backgroundMusicTimer;
+    let backgroundMusicStep = 0;
+    const backgroundMusicVoices = new Set();
     let gestureStart = null;
 
     function updateViewportLayout() {
@@ -709,21 +955,27 @@
 
     function startGame() {
       ensureAudio();
+      backgroundMusicEnabled = true;
+      startBackgroundMusic();
       grid = Array.from({ length: rows }, () => Array(columns).fill(empty));
       score = 0;
       clearedLines = 0;
       level = 1;
       running = true;
+      paused = false;
+      clearingLines = false;
       current = null;
       scoreSaved = false;
       next = randomPiece();
       startOverlay.classList.add('hidden');
       gameOverOverlay.classList.add('hidden');
+      pauseOverlay.classList.add('hidden');
       saveControls.classList.remove('hidden');
       saveButton.disabled = false;
       saveHint.textContent = '';
       spawnPiece();
       updateHud();
+      updatePauseButton();
       render();
       scheduleDrop();
     }
@@ -746,15 +998,32 @@
       current.x = Math.floor(columns / 2) - 2;
       current.y = rows - 1;
       next = randomPiece();
+      renderNextPreview();
 
       if (collides(current)) {
         endGame();
       }
     }
 
+    function renderNextPreview() {
+      nextGrid.innerHTML = '';
+      const filledPreviewCells = new Set((next?.cells || []).map(([x, y]) => `${x},${y + 1}`));
+
+      for (let y = 0; y < 4; y++) {
+        for (let x = 0; x < 4; x++) {
+          const cell = document.createElement('div');
+          cell.className = filledPreviewCells.has(`${x},${y}`) ? 'next-cell filled' : 'next-cell';
+          if (cell.classList.contains('filled')) {
+            cell.style.setProperty('--piece-color', next.color);
+          }
+          nextGrid.appendChild(cell);
+        }
+      }
+    }
+
     function scheduleDrop() {
       clearTimeout(dropTimer);
-      if (!running) return;
+      if (!running || paused || clearingLines) return;
       const interval = Math.max(140, 760 - (level - 1) * 58);
       dropTimer = setTimeout(() => {
         stepDown();
@@ -763,7 +1032,7 @@
     }
 
     function stepDown() {
-      if (!running) return;
+      if (!running || paused || clearingLines) return;
       const moved = move(0, -1);
       if (!moved) {
         lockPiece();
@@ -771,7 +1040,7 @@
     }
 
     function move(dx, dy) {
-      if (!running || !current) return false;
+      if (!running || paused || clearingLines || !current) return false;
 
       const candidate = clonePiece(current);
       candidate.x += dx;
@@ -786,7 +1055,7 @@
     }
 
     function rotate() {
-      if (!running || !current) return;
+      if (!running || paused || clearingLines || !current) return;
 
       const rotated = clonePiece(current);
       if (rotated.type === 'O') return;
@@ -806,7 +1075,7 @@
     }
 
     function hardDrop() {
-      if (!running || !current) return;
+      if (!running || paused || clearingLines || !current) return;
       let distance = 0;
       while (move(0, -1)) {
         distance++;
@@ -825,13 +1094,18 @@
 
       playLockSound();
       vibrate(20);
-      clearFullLines();
+      const fullRows = getFullRows();
+      if (fullRows.length) {
+        startLineClear(fullRows);
+        return;
+      }
+
       spawnPiece();
       updateHud();
       render();
     }
 
-    function clearFullLines() {
+    function getFullRows() {
       const fullRows = [];
       for (let y = 0; y < rows; y++) {
         if (grid[y].every(Boolean)) {
@@ -839,23 +1113,105 @@
         }
       }
 
-      if (!fullRows.length) return;
+      return fullRows;
+    }
 
+    function startLineClear(fullRows) {
+      const nextLineTotal = clearedLines + fullRows.length;
+      const clearLevel = Math.floor(nextLineTotal / 10) + 1;
+      const baseAward = [0, 220, 700, 1300, 2300][fullRows.length] * clearLevel;
+      const multiLineBonus = fullRows.length > 1 ? fullRows.length * fullRows.length * 120 * clearLevel : 0;
+      const award = baseAward + multiLineBonus;
+
+      clearingLines = true;
+      clearTimeout(dropTimer);
+      current = null;
+      updatePauseButton();
+      render();
+      markClearCells(fullRows);
+      showLineClearEffects(fullRows, award, multiLineBonus);
+
+      clearedLines = nextLineTotal;
+      level = clearLevel;
+      score += award;
+      updateHud();
+      pulseScore();
+      playClearSound(fullRows.length);
+      if (fullRows.length > 1) {
+        playMultiLineBonusSound(fullRows.length);
+      }
+      vibrate(fullRows.length >= 4 ? 95 : fullRows.length > 1 ? 68 : 44);
+
+      setTimeout(() => {
+        removeFullRows(fullRows);
+        clearingLines = false;
+        updatePauseButton();
+        spawnPiece();
+        updateHud();
+        render();
+        scheduleDrop();
+      }, 285);
+    }
+
+    function markClearCells(fullRows) {
+      for (const y of fullRows) {
+        for (let x = 0; x < columns; x++) {
+          cells[y * columns + x].classList.add('clear');
+        }
+      }
+    }
+
+    function removeFullRows(fullRows) {
       grid = grid.filter((row, index) => !fullRows.includes(index));
       while (grid.length < rows) {
         grid.push(Array(columns).fill(empty));
       }
+    }
 
-      clearedLines += fullRows.length;
-      level = Math.floor(clearedLines / 10) + 1;
-      score += [0, 100, 300, 500, 800][fullRows.length] * level;
-      playClearSound(fullRows.length);
-      vibrate(fullRows.length >= 4 ? 70 : 40);
+    function pulseScore() {
+      scoreEl.classList.remove('score-pop');
+      void scoreEl.offsetWidth;
+      scoreEl.classList.add('score-pop');
+    }
+
+    function showLineClearEffects(fullRows, award, multiLineBonus) {
+      const boardRect = board.getBoundingClientRect();
+      const labels = ['LINE CLEAR', 'LINE CLEAR', 'DOUBLE CLEAR', 'TRIPLE CLEAR', 'FOUR-LINE BLAST'];
+
+      board.classList.remove('line-clear-kick');
+      void board.offsetWidth;
+      board.classList.add('line-clear-kick');
+      setTimeout(() => board.classList.remove('line-clear-kick'), 380);
+
+      for (const y of fullRows) {
+        const rowCell = cells[y * columns];
+        if (!rowCell) continue;
+        const cellRect = rowCell.getBoundingClientRect();
+        const burst = document.createElement('div');
+        burst.className = 'line-burst';
+        burst.style.top = `${cellRect.top - boardRect.top}px`;
+        burst.style.height = `${cellRect.height}px`;
+        board.appendChild(burst);
+        setTimeout(() => burst.remove(), 560);
+      }
+
+      const reward = document.createElement('div');
+      const points = document.createElement('span');
+      reward.className = 'clear-reward';
+      reward.textContent = labels[fullRows.length] || 'LINE BONUS';
+      points.textContent = multiLineBonus ? `+${award} SCORE / +${multiLineBonus} BONUS` : `+${award} SCORE`;
+      reward.appendChild(points);
+      board.appendChild(reward);
+      setTimeout(() => reward.remove(), 840);
     }
 
     function endGame() {
       running = false;
+      paused = false;
+      clearingLines = false;
+      backgroundMusicEnabled = false;
       clearTimeout(dropTimer);
+      stopBackgroundMusic();
       const best = getScores()[0]?.score || 0;
       scoreSaved = false;
       finalScoreEl.textContent = `Score ${score}`;
@@ -863,9 +1219,11 @@
       saveControls.classList.remove('hidden');
       saveButton.disabled = false;
       gameOverOverlay.classList.remove('hidden');
+      pauseOverlay.classList.add('hidden');
       playerName.value = localStorage.getItem('mihai_tetris_name') || localStorage.getItem('wood_tetris_name') || '';
       playerName.focus();
       renderScores();
+      updatePauseButton();
       playGameOverSound();
       vibrate(80);
     }
@@ -996,6 +1354,95 @@
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
       }
+
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+    }
+
+    function startBackgroundMusic() {
+      if (!backgroundMusicEnabled || muted || paused) return;
+
+      ensureAudio();
+      if (!audioContext || backgroundMusicTimer) return;
+
+      playBackgroundMusicStep();
+    }
+
+    function stopBackgroundMusic() {
+      clearTimeout(backgroundMusicTimer);
+      backgroundMusicTimer = null;
+
+      for (const voice of backgroundMusicVoices) {
+        try {
+          voice.stop();
+        } catch {
+          // Voice has already ended.
+        }
+      }
+
+      backgroundMusicVoices.clear();
+    }
+
+    function playBackgroundMusicStep() {
+      if (!backgroundMusicEnabled || muted || paused || !audioContext) {
+        backgroundMusicTimer = null;
+        return;
+      }
+
+      const chords = [
+        [196, 246.94, 293.66],
+        [174.61, 220, 261.63],
+        [164.81, 196, 246.94],
+        [174.61, 233.08, 293.66]
+      ];
+      const airNotes = [392, 369.99, 329.63, 349.23, 293.66, 329.63];
+      const chord = chords[backgroundMusicStep % chords.length];
+
+      chord.forEach((frequency, index) => {
+        playAmbientVoice(frequency, 5.15, 0.009 - index * 0.0012, index ? 'sine' : 'triangle', index * 0.035);
+      });
+
+      if (backgroundMusicStep % 2 === 0) {
+        playAmbientVoice(airNotes[backgroundMusicStep % airNotes.length], 1.45, 0.006, 'sine', 0.62);
+      }
+
+      backgroundMusicStep++;
+      backgroundMusicTimer = setTimeout(playBackgroundMusicStep, 4400);
+    }
+
+    function playAmbientVoice(frequency, duration, gain, type, delay = 0) {
+      if (muted || !audioContext) return;
+
+      const oscillator = audioContext.createOscillator();
+      const filter = audioContext.createBiquadFilter();
+      const volume = audioContext.createGain();
+      const now = audioContext.currentTime + delay;
+      const attackEnd = now + Math.min(0.75, duration * 0.22);
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, now);
+      oscillator.detune.setValueAtTime((Math.random() - 0.5) * 5, now);
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(type === 'triangle' ? 420 : 720, now);
+      volume.gain.setValueAtTime(0.001, now);
+      volume.gain.linearRampToValueAtTime(gain, attackEnd);
+      volume.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      oscillator.connect(filter);
+      filter.connect(volume);
+      volume.connect(audioContext.destination);
+
+      backgroundMusicVoices.add(oscillator);
+      oscillator.addEventListener('ended', () => {
+        backgroundMusicVoices.delete(oscillator);
+        oscillator.disconnect();
+        filter.disconnect();
+        volume.disconnect();
+      });
+
+      oscillator.start(now);
+      oscillator.stop(now + duration);
     }
 
     function playTone(frequency, duration, gain) {
@@ -1117,6 +1564,16 @@
       }
     }
 
+    function playMultiLineBonusSound(lineCount) {
+      const start = lineCount >= 4 ? 392 : 330;
+      const gain = lineCount >= 4 ? 0.11 : 0.085;
+      playTone(start, 0.08, gain);
+      setTimeout(() => playTone(start * 1.25, 0.1, gain * 0.92), 52);
+      setTimeout(() => playTone(start * 1.5, 0.14, gain), 110);
+      setTimeout(() => playWhistle(860, lineCount >= 4 ? 1480 : 1220, 0.18, gain * 0.72), 140);
+      playFilteredNoise(0.16, gain * 0.65, 560, 'highpass');
+    }
+
     function playGameOverSound() {
       playWhistle(920, 520, 0.34, 0.09);
       setTimeout(() => playFilteredNoise(0.24, 0.07, 420), 120);
@@ -1133,6 +1590,53 @@
       muted = !muted;
       localStorage.setItem('mihai_tetris_muted', String(muted));
       updateMuteButton();
+
+      if (muted) {
+        stopBackgroundMusic();
+        return;
+      }
+
+      startBackgroundMusic();
+    }
+
+    function updatePauseButton() {
+      pauseButton.disabled = !running || clearingLines;
+      pauseButton.textContent = paused ? '▶' : 'Ⅱ';
+      pauseButton.classList.toggle('is-paused', paused);
+      pauseButton.setAttribute('aria-pressed', String(paused));
+      pauseButton.setAttribute('aria-label', paused ? 'Resume game' : 'Pause game');
+    }
+
+    function pauseGame() {
+      if (!running || paused || clearingLines) return;
+
+      paused = true;
+      clearTimeout(dropTimer);
+      stopBackgroundMusic();
+      pauseOverlay.classList.remove('hidden');
+      updatePauseButton();
+      vibrate(20);
+    }
+
+    function resumeGame() {
+      if (!running || !paused) return;
+
+      paused = false;
+      pauseOverlay.classList.add('hidden');
+      ensureAudio();
+      startBackgroundMusic();
+      scheduleDrop();
+      updatePauseButton();
+      vibrate(16);
+    }
+
+    function togglePause() {
+      if (paused) {
+        resumeGame();
+        return;
+      }
+
+      pauseGame();
     }
 
     function vibrate(duration) {
@@ -1166,7 +1670,7 @@
     }
 
     function handleBoardGestureEnd(event) {
-      if (!gestureStart || !running) {
+      if (!gestureStart || !running || paused) {
         gestureStart = null;
         return;
       }
@@ -1200,6 +1704,8 @@
 
     document.getElementById('playButton').addEventListener('click', startGame);
     document.getElementById('restartButton').addEventListener('click', startGame);
+    document.getElementById('resumeButton').addEventListener('click', resumeGame);
+    pauseButton.addEventListener('click', togglePause);
     muteButton.addEventListener('click', toggleMute);
     document.getElementById('scoreForm').addEventListener('submit', event => {
       event.preventDefault();
@@ -1213,7 +1719,12 @@
     document.getElementById('dropButton').addEventListener('click', hardDrop);
 
     window.addEventListener('keydown', event => {
-      if (!running) return;
+      if ((event.key === 'p' || event.key === 'P' || event.key === 'Escape') && running) {
+        togglePause();
+        return;
+      }
+
+      if (!running || paused) return;
       if (event.key === 'ArrowLeft') move(-1, 0);
       if (event.key === 'ArrowRight') move(1, 0);
       if (event.key === 'ArrowDown' && move(0, -1)) {
@@ -1225,7 +1736,7 @@
     });
 
     board.addEventListener('pointerdown', event => {
-      if (!running) return;
+      if (!running || paused) return;
       event.preventDefault();
       gestureStart = {
         x: event.clientX,
@@ -1249,8 +1760,10 @@
     window.visualViewport?.addEventListener('scroll', updateViewportLayout);
 
     updateMuteButton();
+    updatePauseButton();
     updateViewportLayout();
     initCells();
+    renderNextPreview();
     renderScores();
     updateHud();
     requestAnimationFrame(updateViewportLayout);
