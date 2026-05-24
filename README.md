@@ -21,3 +21,15 @@ http://localhost:3010
 - Swipe down/flick down: drop
 - Buttons: left, rotate, right, drop
 - Mute button in the top HUD
+
+## Global Leaderboard
+
+The game uses `/api/scores` for a shared top 10 leaderboard when these Vercel
+environment variables are configured:
+
+```text
+UPSTASH_REDIS_REST_URL
+UPSTASH_REDIS_REST_TOKEN
+```
+
+Without those variables, the browser falls back to local high scores.

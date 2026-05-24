@@ -75,10 +75,10 @@
     .hud {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(76px, 1fr) auto minmax(76px, 1fr);
+      grid-template-columns: 1fr;
       grid-template-rows: auto auto;
       align-items: start;
-      gap: 7px 10px;
+      gap: 8px;
       min-height: 150px;
       padding: 8px 10px 10px;
       border: 2px solid rgba(113, 189, 240, 0.35);
@@ -101,34 +101,60 @@
       background: linear-gradient(90deg, transparent, rgba(159, 214, 239, 0.45), transparent);
     }
 
-    .score-panel {
-      grid-column: 1;
-      grid-row: 1;
-      justify-self: start;
-      align-self: start;
-      padding-top: 0;
+    .hud-main {
       position: relative;
       z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .hud-stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(106px, 0.88fr) minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .score-panel {
+      min-width: 0;
+      padding: 8px 10px;
+      border: 1px solid rgba(159, 214, 239, 0.22);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(10, 24, 37, 0.72), rgba(4, 12, 20, 0.52));
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 8px 18px rgba(0, 0, 0, 0.18);
     }
 
     .score {
-      font-size: 42px;
+      max-width: 100%;
+      overflow: hidden;
+      font-size: clamp(28px, 8vw, 36px);
       font-weight: 900;
       line-height: 1;
       color: var(--gold);
+      font-variant-numeric: tabular-nums;
       text-shadow:
         0 3px 0 rgba(0, 0, 0, 0.55),
         0 0 14px rgba(255, 217, 48, 0.25);
     }
 
+    .score.score-long {
+      font-size: clamp(22px, 6.9vw, 30px);
+    }
+
     .game-title {
-      grid-column: 2;
-      grid-row: 1;
       position: relative;
       z-index: 1;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
+      min-width: 0;
       gap: 9px;
       color: var(--gold);
       font-size: 18px;
@@ -140,6 +166,8 @@
 
     .game-title span {
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .player-photo {
@@ -168,17 +196,10 @@
     }
 
     .level-panel {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      justify-self: center;
       position: relative;
       z-index: 1;
-      min-width: min(306px, calc(100vw - 54px));
-      padding: 6px 8px 7px 14px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 10px;
+      min-width: 0;
+      padding: 8px 10px;
       text-align: center;
       color: var(--muted);
       font-size: 17px;
@@ -197,10 +218,14 @@
     .level-label,
     .best-label {
       display: block;
+      max-width: 100%;
+      overflow: hidden;
       color: #dff5ff;
       font-size: 13px;
       letter-spacing: 0;
       line-height: 1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .level-value,
@@ -211,7 +236,7 @@
 
     .best-line {
       display: block;
-      margin-top: 5px;
+      margin-top: 6px;
     }
 
     .next-panel {
@@ -265,10 +290,8 @@
     }
 
     .hud-buttons {
-      grid-column: 3;
-      grid-row: 1;
       justify-self: end;
-      align-self: start;
+      align-self: center;
       position: relative;
       z-index: 25;
       display: flex;
@@ -730,7 +753,7 @@
       }
 
       .score {
-        font-size: 32px;
+        font-size: clamp(25px, 7vw, 30px);
       }
 
       .stat {
@@ -742,15 +765,22 @@
       }
 
       .hud {
-        grid-template-columns: minmax(62px, 1fr) auto minmax(62px, 1fr);
         min-height: 126px;
-        gap: 6px 8px;
+        gap: 6px;
         padding: 6px 8px 8px;
       }
 
+      .hud-stats {
+        grid-template-columns: minmax(88px, 0.88fr) minmax(0, 1fr) auto;
+        gap: 6px;
+      }
+
+      .score-panel {
+        padding: 6px 8px;
+      }
+
       .level-panel {
-        min-width: min(238px, calc(100vw - 86px));
-        padding: 4px 10px 6px;
+        padding: 6px 8px;
         font-size: 14px;
       }
 
@@ -771,10 +801,6 @@
     }
 
     @media (max-width: 430px) {
-      .hud {
-        grid-template-columns: minmax(56px, 1fr) auto minmax(74px, 1fr);
-      }
-
       .game-title {
         gap: 6px;
         font-size: 13px;
@@ -787,7 +813,7 @@
       }
 
       .score {
-        font-size: 34px;
+        font-size: clamp(25px, 8vw, 32px);
       }
 
       .hud-icon-button {
@@ -805,20 +831,22 @@
 <body>
   <main class="app">
     <header class="hud">
-      <div class="score-panel">
-        <div class="score" id="score">0</div>
-        <div class="stat" id="lines">0 lines</div>
+      <div class="hud-main">
+        <div class="game-title">
+          <img class="player-photo" src="assets/mihai-player.jpg" alt="Mihai">
+          <span>Mihai's Lego Tetris</span>
+        </div>
+        <div class="hud-buttons">
+          <button id="pauseButton" class="hud-icon-button pause-button" type="button" aria-label="Pause game" aria-pressed="false" disabled>Ⅱ</button>
+          <button id="muteButton" class="hud-icon-button mute-button" type="button" aria-label="Mute sound" aria-pressed="false">🔊</button>
+        </div>
       </div>
-      <div class="game-title">
-        <img class="player-photo" src="assets/mihai-player.jpg" alt="Mihai">
-        <span>Mihai's Lego Tetris</span>
-      </div>
-      <div class="hud-buttons">
-        <button id="pauseButton" class="hud-icon-button pause-button" type="button" aria-label="Pause game" aria-pressed="false" disabled>Ⅱ</button>
-        <button id="muteButton" class="hud-icon-button mute-button" type="button" aria-label="Mute sound" aria-pressed="false">🔊</button>
-      </div>
-      <div class="level-panel">
-        <div id="level">Level 1<br>Best 0 - No score</div>
+      <div class="hud-stats">
+        <div class="score-panel">
+          <div class="score" id="score">0</div>
+          <div class="stat" id="lines">0 lines</div>
+        </div>
+        <div class="level-panel" id="level">Level 1<br>Best 0 - No score</div>
         <div class="next-panel" aria-label="Next piece">
           <span class="next-label">NEXT</span>
           <div class="next-grid" id="nextGrid"></div>
@@ -914,6 +942,8 @@
     let paused = false;
     let scoreSaved = false;
     let clearingLines = false;
+    let cachedScores = getLocalScores();
+    let scoreSyncSource = 'local';
     let audioContext;
     let muted = localStorage.getItem('mihai_tetris_muted') === 'true';
     let backgroundMusicEnabled = false;
@@ -1277,6 +1307,7 @@
     function updateHud() {
       const best = getScores()[0];
       scoreEl.textContent = String(score);
+      scoreEl.classList.toggle('score-long', score >= 100000);
       linesEl.textContent = `${clearedLines} lines`;
       levelEl.innerHTML = best
         ? `<span class="level-label">LEVEL <span class="level-value">${level}</span></span><span class="best-line"><span class="best-label">BEST <span class="best-value">${best.score}</span> - ${escapeHtml(best.name)}</span></span>`
@@ -1293,15 +1324,54 @@
       };
     }
 
-    function getScores() {
+    function getLocalScores() {
       try {
-        return JSON.parse(localStorage.getItem('mihai_tetris_scores') || localStorage.getItem('wood_tetris_scores') || '[]');
+        return normalizeScores(JSON.parse(localStorage.getItem('mihai_tetris_scores') || localStorage.getItem('wood_tetris_scores') || '[]'));
       } catch {
         return [];
       }
     }
 
-    function saveScore(name) {
+    function getScores() {
+      return cachedScores;
+    }
+
+    function normalizeScores(scores) {
+      if (!Array.isArray(scores)) return [];
+
+      return scores
+        .map(entry => ({
+          name: String(entry.name || 'Anonymous').replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 18) || 'Anonymous',
+          score: Math.max(0, Math.floor(Number(entry.score) || 0)),
+          lines: Math.max(0, Math.floor(Number(entry.lines) || 0)),
+          date: typeof entry.date === 'string' ? entry.date : new Date().toISOString()
+        }))
+        .filter(entry => entry.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+    }
+
+    function cacheScores(scores, source = scoreSyncSource) {
+      cachedScores = normalizeScores(scores);
+      scoreSyncSource = source;
+      localStorage.setItem('mihai_tetris_scores', JSON.stringify(cachedScores));
+    }
+
+    async function loadScores() {
+      try {
+        const response = await fetch('/api/scores', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Score API returned ${response.status}`);
+        const data = await response.json();
+        cacheScores(data.scores, 'global');
+      } catch {
+        cacheScores(getLocalScores(), 'local');
+      }
+
+      renderScores();
+      updateHud();
+    }
+
+    async function saveScore(name) {
       if (scoreSaved) return;
 
       scoreSaved = true;
@@ -1310,11 +1380,23 @@
 
       const safeName = name.trim() || 'Anonymous';
       localStorage.setItem('mihai_tetris_name', safeName);
-      const scores = getScores();
-      scores.push({ name: safeName, score, lines: clearedLines, date: new Date().toISOString() });
-      scores.sort((a, b) => b.score - a.score);
-      localStorage.setItem('mihai_tetris_scores', JSON.stringify(scores.slice(0, 10)));
-      saveHint.textContent = 'Score saved';
+      const entry = { name: safeName, score, lines: clearedLines, date: new Date().toISOString() };
+
+      try {
+        const response = await fetch('/api/scores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry)
+        });
+        if (!response.ok) throw new Error(`Score API returned ${response.status}`);
+        const data = await response.json();
+        cacheScores(data.scores, 'global');
+        saveHint.textContent = 'Score saved globally';
+      } catch {
+        cacheScores([...getLocalScores(), entry], 'local');
+        saveHint.textContent = 'Score saved on this device';
+      }
+
       renderScores();
       updateHud();
     }
@@ -1330,7 +1412,7 @@
         return;
       }
 
-      scores.slice(0, 5).forEach((entry, index) => {
+      scores.slice(0, 10).forEach((entry, index) => {
         const row = document.createElement('div');
         row.className = 'score-row';
         row.innerHTML = `<span>${index + 1}</span><span>${escapeHtml(entry.name)}</span><span>${entry.score}</span>`;
@@ -1766,6 +1848,7 @@
     renderNextPreview();
     renderScores();
     updateHud();
+    loadScores();
     requestAnimationFrame(updateViewportLayout);
     setTimeout(updateViewportLayout, 250);
   </script>
