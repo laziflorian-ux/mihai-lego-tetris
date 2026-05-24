@@ -24,12 +24,15 @@ http://localhost:3010
 
 ## Global Leaderboard
 
-The game uses `/api/scores` for a shared top 10 leaderboard when these Vercel
-environment variables are configured:
+The game uses `/api/scores` for a shared top 10 leaderboard when Upstash Redis
+is connected through Vercel Marketplace. The integration usually provides:
 
 ```text
-UPSTASH_REDIS_REST_URL
-UPSTASH_REDIS_REST_TOKEN
+KV_REST_API_URL
+KV_REST_API_TOKEN
 ```
+
+The API also supports the older `UPSTASH_REDIS_REST_URL` and
+`UPSTASH_REDIS_REST_TOKEN` names.
 
 Without those variables, the browser falls back to local high scores.
